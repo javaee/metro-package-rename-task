@@ -8,6 +8,6 @@ public class DummyTest extends TestCase {
     public DummyTest(String name) {
         super(name);
     }
-    
+    x
     public void test1() {}
 }

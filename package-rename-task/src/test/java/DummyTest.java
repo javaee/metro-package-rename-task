@@ -5,5 +5,9 @@ import junit.framework.TestCase;
  * @author Kohsuke Kawaguchi
  */
 public class DummyTest extends TestCase {
+    public DummyTest(String name) {
+        super(name);
+    }
+    
     public void test1() {}
 }

@@ -1,0 +1,26 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.wts.tools.ant</groupId>
+  <artifactId>package-rename-task</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0</version>
+  <name>Package rename ant task</name>
+  <inceptionYear>2006</inceptionYear>
+  <url>https://package-rename-task.dev.java.net/</url>
+
+  <distributionManagement>
+    <repository>
+      <id>local-repository</id>
+      <url>file:./target/repository/</url>
+      <layout>legacy</layout>
+    </repository>
+  </distributionManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.6</version>
+    </dependency>
+  </dependencies>
+</project>

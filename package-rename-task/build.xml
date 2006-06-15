@@ -1,0 +1,22 @@
+<project default="test">
+  <!--
+    This build script is only for testing renaming.
+    This project uses Maven as the build system.
+  -->
+  <target name="test">
+    <taskdef name="prename" classname="com.sun.wts.tools.ant.PackageRenameTask">
+      <classpath>
+        <pathelement path="target/classes" />
+      </classpath>
+    </taskdef>
+
+    <delete dir="target/rename-test" />
+    <prename srcdir="src/test/java" destdir="target/rename-test">
+      <pattern from="org.acme.foo.us" to="org.acme.foo.internal.us" />
+      <pattern from="org.acme.foo.japan" to="org.acme.foo.internal.japan" />
+    </prename>
+
+    <mkdir dir="target/rename-test-classes" />
+    <javac srcdir="target/rename-test" destdir="target/rename-test-classes" />
+  </target>
+</project>

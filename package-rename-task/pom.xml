@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.wts.tools.ant</groupId>
   <artifactId>package-rename-task</artifactId>
-  <packaging>jar</packaging>
+  <packaging>maven-plugin</packaging>
   <version>1.0</version>
   <name>Package rename ant task</name>
   <inceptionYear>2006</inceptionYear>
@@ -21,6 +21,16 @@
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

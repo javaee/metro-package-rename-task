@@ -21,6 +21,15 @@ public class RenamePattern {
      */
     private String to;
 
+
+    public RenamePattern() {
+    }
+
+    public RenamePattern(String from, String to) {
+        this.from = from;
+        this.to = to;
+    }
+
     String getFrom() {
         return from;
     }

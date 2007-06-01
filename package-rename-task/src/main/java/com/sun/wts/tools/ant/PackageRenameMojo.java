@@ -44,11 +44,16 @@ public class PackageRenameMojo extends AbstractMojo {
 
     /**
      * Rename patterns as a map.
+     *
+     * @parameter
      */
     private Map patterns;
 
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if(patterns==null)
+            throw new MojoExecutionException("No replacement patterns given");
+        
         for( String dir : (List<String>)project.getCompileSourceRoots() ) {
             PackageRenameTask task = new PackageRenameTask();
             task.setProject(createAntProject());

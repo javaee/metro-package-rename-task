@@ -10,9 +10,9 @@
 
   <distributionManagement>
     <repository>
+      <uniqueVersion>false</uniqueVersion>
       <id>local-repository</id>
-      <url>file:./target/repository/</url>
-      <layout>legacy</layout>
+      <url>file:${path-to-m2-repo.java.net}</url>
     </repository>
   </distributionManagement>
 

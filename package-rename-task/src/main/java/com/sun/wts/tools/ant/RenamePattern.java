@@ -59,8 +59,9 @@ public class RenamePattern {
              this.excludes.add(st.nextToken().trim()+".");
     }
 
-    interface Function {
-        String apply(String s);
+    static abstract class Function {
+        abstract String apply(String s);
+        String applyExclude(String s) { return apply(s); }
     }
 
     private static final Function[] FUNCTIONS = new Function[] {
@@ -69,12 +70,15 @@ public class RenamePattern {
             public String apply(String s) {
                 return s;
             }
+            String applyExclude(String s) {
+                return cutEnd(s);
+            }
         },
         // dot-delimited pattern with ';' termination. "org.acme.foo;"
         // used for package statement.
         new Function() {
             public String apply(String s) {
-                return s.substring(0, s.length() - 1) +';';
+                return cutEnd(s) +';';
             }
         },
         // slash-delimited pattern "org/acme/foo/"
@@ -91,6 +95,10 @@ public class RenamePattern {
         }
     };
 
+    private static String cutEnd(String s) {
+        return s.substring(0, s.length() - 1);
+    }
+
     /**
      * Adds all the rename commands to the given list.
      */
@@ -99,7 +107,7 @@ public class RenamePattern {
         for( Function f : FUNCTIONS ) {
             List<Pattern> exclusions = new ArrayList<Pattern>();
             for (String exclude : excludes)
-                exclusions.add(Pattern.compile(f.apply(exclude),Pattern.LITERAL));
+                exclusions.add(Pattern.compile(f.applyExclude(exclude),Pattern.LITERAL));
 
             commands.add(new Command(
                 Pattern.compile(f.apply(from),Pattern.LITERAL),

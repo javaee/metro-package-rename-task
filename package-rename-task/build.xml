@@ -13,10 +13,10 @@
     <delete dir="target/rename-test" />
     <prename srcdir="src/test/java" destdir="target/rename-test">
       <pattern from="org.acme.foo.us" to="org.acme.foo.internal.us" />
-      <pattern from="org.acme.foo.japan" to="org.acme.foo.internal.japan" />
+      <pattern from="org.acme.foo.japan" to="org.acme.foo.internal.japan" excludes="org.acme.foo.japan.islands" />
     </prename>
 
     <mkdir dir="target/rename-test-classes" />
-    <javac srcdir="target/rename-test" destdir="target/rename-test-classes" />
+    <javac srcdir="target/rename-test" destdir="target/rename-test-classes" includes="org/" />
   </target>
 </project>

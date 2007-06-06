@@ -97,9 +97,13 @@ public class RenamePattern {
      */
     String convertPath(String relPath) {
         String norm = relPath.replace('/','.').replace('\\','.');
-        if(norm.startsWith(from))
+        if(norm.startsWith(from)) {
+            for (String e : excludes) {
+                if(norm.startsWith(e))
+                    return null;
+            }
             return to.replace('.',File.separatorChar)+relPath.substring(from.length());
-        else
+        } else
             return null;
     }
 }

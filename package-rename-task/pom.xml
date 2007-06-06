@@ -3,7 +3,7 @@
   <groupId>com.sun.wts.tools.ant</groupId>
   <artifactId>package-rename-task</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <name>Package rename ant task</name>
   <inceptionYear>2006</inceptionYear>
   <url>https://package-rename-task.dev.java.net/</url>
@@ -55,7 +55,7 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-      <plugin>
+      <!--plugin>
         <groupId>com.sun.wts.tools.ant</groupId>
         <artifactId>package-rename-task</artifactId>
         <configuration>
@@ -63,7 +63,7 @@
             <com.sun.wts.tools.ant>com.sun.internal.wts.tools.ant</com.sun.wts.tools.ant>
           </patterns>
         </configuration>
-      </plugin>
+      </plugin-->
     </plugins>
   </build>
 </project>

@@ -59,31 +59,52 @@ public class RenamePattern {
              this.excludes.add(st.nextToken().trim()+".");
     }
 
+    interface Function {
+        String apply(String s);
+    }
+
+    private static final Function[] FUNCTIONS = new Function[] {
+        // dot-delimited pattern "org.acme.foo."
+        new Function() {
+            public String apply(String s) {
+                return s;
+            }
+        },
+        // dot-delimited pattern with ';' termination. "org.acme.foo;"
+        // used for package statement.
+        new Function() {
+            public String apply(String s) {
+                return s.substring(0, s.length() - 1) +';';
+            }
+        },
+        // slash-delimited pattern "org/acme/foo/"
+        new Function() {
+            public String apply(String s) {
+                return s.replace('.','/');
+            }
+        },
+        // backslash-delimited pattern "org\acme\foo\"
+        new Function() {
+            public String apply(String s) {
+                return s.replace('.','\\');
+            }
+        }
+    };
+
     /**
      * Adds all the rename commands to the given list.
      */
     public void addCommands( List<Command> commands ) {
-        // dot-delimited pattern "org.acme.foo."
-        commands.add(new Command(
-            Pattern.compile(from,Pattern.LITERAL),
-            to));
-        // dot-delimited pattern with ';' termination. "org.acme.foo;"
-        // used for package statement.
-        commands.add(new Command(
-            Pattern.compile(cutEnd(from)+';',Pattern.LITERAL),
-            cutEnd(to)+';'));
-        // slash-delimited pattern "org/acme/foo/"
-        commands.add(new Command(
-            Pattern.compile(from.replace('.','/'),Pattern.LITERAL),
-            to.replace('.','/')));
-        // backslash-delimited pattern "org\acme\foo\"
-        commands.add(new Command(
-            Pattern.compile(from.replace('.','\\'),Pattern.LITERAL),
-            to.replace('.','\\')));
-    }
 
-    private String cutEnd(String from) {
-        return from.substring(0,from.length()-1);
+        for( Function f : FUNCTIONS ) {
+            List<Pattern> exclusions = new ArrayList<Pattern>();
+            for (String exclude : excludes)
+                exclusions.add(Pattern.compile(f.apply(exclude),Pattern.LITERAL));
+
+            commands.add(new Command(
+                Pattern.compile(f.apply(from),Pattern.LITERAL),
+                f.apply(to),exclusions));
+        }
     }
 
     /**

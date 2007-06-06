@@ -3,6 +3,8 @@ package com.sun.wts.tools.ant;
 import java.io.File;
 import java.util.regex.Pattern;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.ArrayList;
 
 /**
  * One rename command.
@@ -20,6 +22,11 @@ public class RenamePattern {
      * e.g., "org.acme.internal.foo."
      */
     private String to;
+
+    /**
+     * Package name that match these and the {@link #from} will be skipped.
+     */
+    private final List<String> excludes = new ArrayList<String>();
 
 
     public RenamePattern() {
@@ -44,6 +51,12 @@ public class RenamePattern {
 
     public void setTo(String to) {
         this.to = to+'.';
+    }
+
+    public void setExcludes(String excludes) {
+        StringTokenizer st = new StringTokenizer(excludes, ",");
+        while(st.hasMoreTokens())
+             this.excludes.add(st.nextToken().trim()+".");
     }
 
     /**

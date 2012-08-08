@@ -68,9 +68,9 @@
   </licenses>
 
   <scm>
-    <url>http://java.net/projects/package-rename-task/sources/svn/show/trunk</url>
-    <connection>scm:svn:https://svn.java.net/svn/package-rename-task~svn/trunk</connection>
-    <developerConnection>scm:svn:https://svn.java.net/svn/package-rename-task~svn/trunk</developerConnection>
+    <url>http://java.net/projects/package-rename-task/sources/svn/show/trunk/package-rename-task</url>
+    <connection>scm:svn:https://svn.java.net/svn/package-rename-task~svn/trunk/package-rename-task</connection>
+    <developerConnection>scm:svn:https://svn.java.net/svn/package-rename-task~svn/trunk/package-rename-task</developerConnection>
   </scm>
 
   <developers>

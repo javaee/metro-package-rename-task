@@ -1,4 +1,11 @@
 <project>
+
+    <parent>
+        <groupId>net.java</groupId>
+	<artifactId>jvnet-parent</artifactId>
+	<version>3</version>
+    </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.wts.tools.ant</groupId>
   <artifactId>package-rename-task</artifactId>
@@ -6,15 +13,20 @@
   <version>1.2-SNAPSHOT</version>
   <name>Package rename ant task</name>
   <inceptionYear>2006</inceptionYear>
-  <url>https://package-rename-task.dev.java.net/</url>
+  <url>http://package-rename-task.java.net/</url>
 
-  <distributionManagement>
+  <scm>
+    <url>https://svn.java.net/svn/package-rename-task~svn/trunk</url>
+    <connection>https://svn.java.net/svn/package-rename-task~svn/trunk</connection>
+  </scm>
+
+<!--  <distributionManagement>
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>local-repository</id>
       <url>file:${path-to-m2-repo.java.net}</url>
     </repository>
-  </distributionManagement>
+  </distributionManagement>-->
 
   <dependencies>
     <dependency>

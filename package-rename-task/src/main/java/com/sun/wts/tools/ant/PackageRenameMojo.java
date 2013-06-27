@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -96,6 +96,13 @@ public class PackageRenameMojo extends AbstractMojo {
      */
     private Map patterns;
 
+    /**
+     * Exclude patterns when renaming (pattern to keep)
+     *
+     * @parameter
+     */
+    private String excludes;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if(patterns==null)
@@ -115,7 +122,9 @@ public class PackageRenameMojo extends AbstractMojo {
             task.setDestdir(rootDir);
             task.setSrcDir(dir);
             for (Map.Entry<String,String> e : (Collection<Entry<String,String>>)patterns.entrySet()) {
-                task.addConfiguredPattern(new RenamePattern(e.getKey(),e.getValue()));
+                RenamePattern pattern = new RenamePattern(e.getKey(), e.getValue());
+                pattern.setExcludes(excludes);
+                task.addConfiguredPattern(pattern);
             }
             task.execute();
         }

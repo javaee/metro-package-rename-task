@@ -123,7 +123,9 @@ public class PackageRenameMojo extends AbstractMojo {
             task.setSrcDir(dir);
             for (Map.Entry<String,String> e : (Collection<Entry<String,String>>)patterns.entrySet()) {
                 RenamePattern pattern = new RenamePattern(e.getKey(), e.getValue());
-                pattern.setExcludes(excludes);
+                if (excludes != null) {
+                    pattern.setExcludes(excludes);
+                }
                 task.addConfiguredPattern(pattern);
             }
             task.execute();

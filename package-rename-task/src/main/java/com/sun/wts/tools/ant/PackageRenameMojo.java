@@ -103,6 +103,13 @@ public class PackageRenameMojo extends AbstractMojo {
      */
     private String excludes;
 
+    /**
+     * Exclude packages which has not been matched by any pattern from output directory.
+     *
+     * @parameter
+     */
+    private boolean excludeNonRenamed;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if(patterns==null)
@@ -121,6 +128,7 @@ public class PackageRenameMojo extends AbstractMojo {
             task.setProject(createAntProject());
             task.setDestdir(rootDir);
             task.setSrcDir(dir);
+            task.setExcludeNonRenamed(excludeNonRenamed);
             for (Map.Entry<String,String> e : (Collection<Entry<String,String>>)patterns.entrySet()) {
                 RenamePattern pattern = new RenamePattern(e.getKey(), e.getValue());
                 if (excludes != null) {

@@ -23,6 +23,8 @@ public class PackageRenameTask extends MatchingTask {
     private List<RenamePattern> patterns = new ArrayList<RenamePattern>();
     private List<Command> commands = new ArrayList<Command>();
 
+    private boolean excludeNonRenamed;
+
     public void setDestdir(File destDir) {
         this.destDir = destDir;
     }
@@ -34,6 +36,10 @@ public class PackageRenameTask extends MatchingTask {
     public void addConfiguredPattern( RenamePattern p ) {
         p.addCommands(commands);
         patterns.add(p);
+    }
+
+    public void setExcludeNonRenamed(boolean excludeNonRenamed) {
+        this.excludeNonRenamed = excludeNonRenamed;
     }
 
     public void execute() throws BuildException {
@@ -50,8 +56,13 @@ public class PackageRenameTask extends MatchingTask {
                 if(dstRelPath!=null)
                     break;
             }
-            if(dstRelPath==null)
-                dstRelPath = relPath;   // didn't match any name
+            if(dstRelPath==null) {
+                // didn't match any name
+                if (excludeNonRenamed) {
+                    continue;
+                }
+                dstRelPath = relPath;
+            }
             File dfile = new File(destDir,dstRelPath);
 
             process(sfile,dfile);

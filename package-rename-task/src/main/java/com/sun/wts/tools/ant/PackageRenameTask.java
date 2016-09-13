@@ -23,8 +23,6 @@ public class PackageRenameTask extends MatchingTask {
     private List<RenamePattern> patterns = new ArrayList<RenamePattern>();
     private List<Command> commands = new ArrayList<Command>();
 
-    private boolean excludeNonRenamed;
-
     public void setDestdir(File destDir) {
         this.destDir = destDir;
     }
@@ -38,10 +36,6 @@ public class PackageRenameTask extends MatchingTask {
         patterns.add(p);
     }
 
-    public void setExcludeNonRenamed(boolean excludeNonRenamed) {
-        this.excludeNonRenamed = excludeNonRenamed;
-    }
-
     public void execute() throws BuildException {
         log("performing package renaming",Project.MSG_INFO);
 
@@ -50,23 +44,32 @@ public class PackageRenameTask extends MatchingTask {
             File sfile = new File(srcDir,relPath);
 
             // compute the target file name
-            String dstRelPath=null;
-            for (RenamePattern p : patterns) {
-                dstRelPath = p.convertPath(relPath);
-                if(dstRelPath!=null)
-                    break;
-            }
-            if(dstRelPath==null) {
-                // didn't match any name
-                if (excludeNonRenamed) {
-                    continue;
-                }
-                dstRelPath = relPath;
-            }
+            RenamePattern match = findBestMatch(relPath);
+            String dstRelPath = match != null ? match.convertPath(relPath) : relPath;
+
             File dfile = new File(destDir,dstRelPath);
 
             process(sfile,dfile);
         }
+    }
+
+    /**
+     * Finds best matching pattern for provided path.
+     *
+     * If rel path is com.sun.istack.tools and there are patterns
+     * com.sun.istack and com.sun.istack.tools, always the latter will be resolved
+     *
+     * @param relPath relPath to check patterns against
+     * @return best matching pattern
+     */
+    private RenamePattern findBestMatch(String relPath) {
+        RenamePattern result = null;
+        for (RenamePattern pattern : patterns) {
+            if (pattern.matches(relPath) && (result == null || result.getFrom().length() < pattern.getFrom().length())) {
+                result = pattern;
+            }
+        }
+        return result;
     }
 
     /**

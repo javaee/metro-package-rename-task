@@ -1,5 +1,7 @@
 package com.sun.wts.tools.ant;
 
+import org.apache.maven.plugin.MojoFailureException;
+
 import java.io.File;
 import java.util.regex.Pattern;
 import java.util.List;
@@ -13,6 +15,10 @@ import java.util.ArrayList;
  */
 public class RenamePattern {
     /**
+     * Separator pattern for configuring target directory of the pattern.
+     */
+    private final String DIRECTORY_SEPARATOR = "/";
+    /**
      * Package name to rename from.
      * e.g., "org.acme.foo."
      */
@@ -22,6 +28,11 @@ public class RenamePattern {
      * e.g., "org.acme.internal.foo."
      */
     private String to;
+
+    /**
+     * Directory to put renamed entries into for this pattern.
+     */
+    private String directory;
 
     /**
      * Package name that match these and the {@link #from} will be skipped.
@@ -34,7 +45,17 @@ public class RenamePattern {
 
     public RenamePattern(String from, String to) {
         this.from = from;
-        this.to = to;
+        parseTo(to);
+    }
+
+    private void parseTo(String to) {
+        if (!to.contains(DIRECTORY_SEPARATOR)) {
+            this.to = to;
+            return;
+        }
+        final int separatorIndex = to.lastIndexOf(DIRECTORY_SEPARATOR);
+        this.directory = to.substring(0, separatorIndex);
+        this.to = to.substring(separatorIndex + 1, to.length());
     }
 
     String getFrom() {
@@ -122,17 +143,32 @@ public class RenamePattern {
      * "org/acme/internal/foo/abc/Foo.java"
      *
      * @return
-     *      Null if the path name doesn't match this rename command.
+     *      Converted pattern
      */
     String convertPath(String relPath) {
+        StringBuilder result = new StringBuilder();
+        if (directory != null) {
+            result.append(directory).append(File.separatorChar);
+        }
+        result.append(to.replace('.',File.separatorChar)).append(relPath.substring(from.length()));
+        return result.toString();
+    }
+
+    /**
+     * Checks if this pattern matches to given path.
+     *
+     * @param relPath path to match
+     * @return true if matches
+     */
+    boolean matches(String relPath) {
         String norm = relPath.replace('/','.').replace('\\','.');
         if(norm.startsWith(from)) {
             for (String e : excludes) {
                 if(norm.startsWith(e))
-                    return null;
+                    return false;
             }
-            return to.replace('.',File.separatorChar)+relPath.substring(from.length());
-        } else
-            return null;
+            return true;
+        }
+        return false;
     }
 }

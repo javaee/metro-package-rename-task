@@ -92,6 +92,13 @@ public class PackageRenameMojo extends AbstractMojo {
     /**
      * Rename patterns as a map.
      *
+     * If pattern value (rename to value) contains "/" character it will be used as separator for target directory
+     * of the specified pattern. For example:
+     *
+     * {@code <com.sun.xml>java.xml.bind/com.sun.xml.internal</com.sun.xml>}
+     *
+     * Will be renamed to com.sun.xml.internal and put into java.xml.bind directory.
+     *
      * @parameter
      */
     private Map patterns;
@@ -102,13 +109,6 @@ public class PackageRenameMojo extends AbstractMojo {
      * @parameter
      */
     private String excludes;
-
-    /**
-     * Exclude packages which has not been matched by any pattern from output directory.
-     *
-     * @parameter
-     */
-    private boolean excludeNonRenamed;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -128,7 +128,6 @@ public class PackageRenameMojo extends AbstractMojo {
             task.setProject(createAntProject());
             task.setDestdir(rootDir);
             task.setSrcDir(dir);
-            task.setExcludeNonRenamed(excludeNonRenamed);
             for (Map.Entry<String,String> e : (Collection<Entry<String,String>>)patterns.entrySet()) {
                 RenamePattern pattern = new RenamePattern(e.getKey(), e.getValue());
                 if (excludes != null) {
